@@ -83,6 +83,19 @@ if __name__ == "__main__":
         get_author_commits(git_folder)
         print("[%s] process finished\n" %git_folder)
 
+    # process files
+    # for every file
+    # read file line by line
+    # get the line start with 'Date'
+    # get time, paras time
+    # store times of time to array
+    # resize to 2-D array
+
+
+    # draw image with OpenCV
+
+
+
 
 
 
