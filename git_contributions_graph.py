@@ -5,7 +5,7 @@ import os
 
 author_email_list = ['slgsunjian@163.com', 'slgsunjian@gmail.com', 'sunjian4@csvw.com']
 
-post_process_author_email_list = []
+tmp_file_name_list = []
 
 tmp_store_folder = ""
 
@@ -35,11 +35,21 @@ def get_all_floder():
 
 
 def get_author_commits(repo_path):
+    """
+    the output format looks like this
+
+    commit 5c6f14ea7a6de77efc4ab120b9d90035xxxx
+    Author: xxx <xxxxx@xxx.com>
+    Date:   2020-04-09
+
+    commits xxxxx
+    """
     os.chdir(git_folder)
 
-    # get author commit write to *.txt file
-    # for author_email in author_email_list:
-    #     os.system("git log --author=%s --date=short > " %author_email %)
+    # get author commit and write to *.txt file
+    for author_email in author_email_list:
+        index = author_email_list.index(author_email)
+        os.system("git log --author=%s --date=short > %s" %(author_email, tmp_file_name_list[index]))
 
 def post_process_email():
     """
@@ -47,9 +57,9 @@ def post_process_email():
     add 'tmp_' prefix
     """
     for email_addr in author_email_list:
-        tmp_email_addr = 'tmp_' + email_addr[:-4]
-        post_process_author_email_list.append(tmp_email_addr)
-        print("%s >> %s" %(email_addr, tmp_email_addr))
+        tmp_file_name = tmp_store_folder  + '/' + 'tmp_' + email_addr[:-4] + '.txt'
+        tmp_file_name_list.append(tmp_file_name)
+        print("%s >> %s" %(email_addr, tmp_file_name))
 
 
 if __name__ == "__main__":
@@ -68,13 +78,11 @@ if __name__ == "__main__":
     git_folder_list = get_all_floder()
 
     # deal with every repository
-    all_commits_list = []
-    # for git_folder in git_folder_list:
-        # print("\nstart process [%s]" %git_folder)
-        # get_author_commits(git_folder)
-        # print("[%s] process finished\n" %git_folder)
+    for git_folder in git_folder_list:
+        print("start process [%s]" %git_folder)
+        get_author_commits(git_folder)
+        print("[%s] process finished\n" %git_folder)
 
-    print(all_commits_list)
 
 
 
