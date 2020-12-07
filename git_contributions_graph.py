@@ -9,6 +9,8 @@ tmp_file_name_list = []
 
 tmp_store_folder = ""
 
+date_list = []
+
 # get all folder path
 # including itself floder
 # check if exits .git floder
@@ -61,6 +63,18 @@ def post_process_email():
         tmp_file_name_list.append(tmp_file_name)
         print("%s >> %s" %(email_addr, tmp_file_name))
 
+def get_date_lines():
+    os.chdir(tmp_store_folder)
+
+    for file in os.listdir(tmp_store_folder):
+        print("start process %s" %file)
+        fo = open(file,"r")
+        for line in fo.readlines():
+            if line.startswith("Date:"):
+                date_list.append(line)
+        fo.close()
+        print("%s processed\n" %file)
+
 
 if __name__ == "__main__":
     # init
@@ -87,7 +101,23 @@ if __name__ == "__main__":
     # for every file
     # read file line by line
     # get the line start with 'Date'
+    get_date_lines()
+    print("get %d commits in total" %len(date_list))
+    print("0: %s" %date_list[0])
+    print("------")
+    print("%d: %s\n" %(len(date_list)-1, date_list[len(date_list)-1]))
+
     # get time, paras time
+    # from datetime import date
+    # d0 = date(2008, 8, 18)
+    # d1 = date(2008, 9, 26)
+    # delta = d1 - d0
+    # print(delta.days)
+    # d0.weekday()
+    # 0 - sunday
+    # 1 - monday
+    # 6 - saturday
+
     # store times of time to array
     # resize to 2-D array
 
