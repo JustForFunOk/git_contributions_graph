@@ -5,19 +5,21 @@
 
 ## Usage
 
-1. create a new folder. e.g. git_graph
+
+1. clone this repository to `git_contributions_graph` folder
     ``` shell
-    mkdir git_graph
-    ```
-2. copy all your repository to `git_graph` folder
-3. clone this repository to `git_graph` folder
-    ``` shell
-    cd git_graph/
     git clone
+    cd git_contributions_graph/
     ```
-4. at last, the folder structure looks like this
+
+1. copy all your repositories to `git_contributions_graph/repositories/` folder
+
+1. at last, the folder structure looks like this
     ``` shell
     git_graph
 
     ```
-5. run
+1. run scripts
+    ``` shell
+    ./git_contributions_graph.py
+    ```
