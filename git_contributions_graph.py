@@ -125,9 +125,9 @@ def draw_calendar_graph(calendar_array):
 
     '''
     image_w = 1200
-    image_h = 230
+    image_h = 200
     left_top_x = 50
-    left_top_y = 50
+    left_top_y = 30
     rect_w = 15
     rect_h = 15
     step_w = 20
@@ -140,37 +140,59 @@ def draw_calendar_graph(calendar_array):
     for i in range(len(calendar_array)):
         for j in range(len(calendar_array[0])):
             if calendar_array[i, j] != -1:
-                # thickness = -1 means filled rectangle
-                img = cv2.rectangle(img, (left_top_x+j*step_w, left_top_y+i*step_h), (left_top_x+j*step_w+rect_w, left_top_y+i*step_h+rect_h), color_level[calendar_array[i,j]], -1)
+                img = cv2.rectangle(img, # image
+                                    (left_top_x+j*step_w, left_top_y+i*step_h), # start_point
+                                    (left_top_x+j*step_w+rect_w, left_top_y+i*step_h+rect_h), # end_point
+                                    color_level[calendar_array[i,j]], # color
+                                    -1) # thickness = -1 means filled rectangle
 
-    # fill text
-    # Monday
-    img = cv2.putText(img, # image
-                    'Mon', # text
-                    (left_top_x-32, left_top_y+step_h+rect_h), # bottom-left corner of the text string
+    # draw color ruler
+    color_ruler = [0, 1, 2, 3, 4]
+    for i in range(len(color_ruler)):
+        img = cv2.rectangle(img, # image
+                            (image_w-260+i*step_w, image_h-10-rect_h), # start_point
+                            (image_w-260+i*step_w+rect_h, image_h-10), # end_point
+                            color_level[color_ruler[i]], # color
+                            -1) # thickness = -1 means filled rectangle
+
+
+    # fill text of weekday
+    weekday_text_array = ['Mon', 'Wed', 'Fri']
+    for i in range(len(weekday_text_array)):
+        img = cv2.putText(img, # image
+                        weekday_text_array[i], # text
+                        (left_top_x-32, left_top_y+2*i*step_h+step_h+rect_h), # bottom-left corner of the text string
+                        cv2.FONT_HERSHEY_SIMPLEX, # font type
+                        0.5, # font scale factor
+                        (0,0,0), # color
+                        1, # thickness
+                        cv2.LINE_AA) # linetype
+
+    # fill text of month
+    month_text_array = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    for i in range(len(month_text_array)):
+        img = cv2.putText(img, # image
+                    month_text_array[i], # text
+                    # 4.3 = 365/12/4.0
+                    (int(round(left_top_x+4.3*i*step_w+2*step_w)), left_top_y-7), # bottom-left corner of the text string
                     cv2.FONT_HERSHEY_SIMPLEX, # font type
                     0.5, # font scale factor
                     (0,0,0), # color
                     1, # thickness
                     cv2.LINE_AA) # linetype
-    # Wednesday
-    img = cv2.putText(img, # image
-                    'Wed', # text
-                    (left_top_x-32, left_top_y+3*step_h+rect_h), # bottom-left corner of the text string
+
+    # fill text of less and more
+    less_more_text = ['Less', 'More']
+    for i in range(len(less_more_text)):
+        img = cv2.putText(img, # image
+                    less_more_text[i], # text
+                    (int(round(image_w-300+7*i*step_w)), image_h-11), # bottom-left corner of the text string
                     cv2.FONT_HERSHEY_SIMPLEX, # font type
                     0.5, # font scale factor
                     (0,0,0), # color
                     1, # thickness
                     cv2.LINE_AA) # linetype
-    # Friday
-    img = cv2.putText(img, # image
-                    'Fri', # text
-                    (left_top_x-32, left_top_y+5*step_h+rect_h), # bottom-left corner of the text string
-                    cv2.FONT_HERSHEY_SIMPLEX, # font type
-                    0.5, # font scale factor
-                    (0,0,0), # color
-                    1, # thickness
-                    cv2.LINE_AA) # linetype
+
 
 
     cv2.imshow("result", img)
