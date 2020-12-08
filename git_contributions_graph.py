@@ -113,18 +113,8 @@ def draw_calendar_graph(calendar_array):
                    ( 48, 161,  78),
                    ( 33, 110,  57)
                     ]
-    '''
-    ----------------------------------------
-    |
-    |   --
-    |
-    |
-    |
-    |
-    |
 
-    '''
-    image_w = 1200
+    image_w = 1130
     image_h = 200
     left_top_x = 50
     left_top_y = 30
@@ -145,16 +135,28 @@ def draw_calendar_graph(calendar_array):
                                     (left_top_x+j*step_w+rect_w, left_top_y+i*step_h+rect_h), # end_point
                                     color_level[calendar_array[i,j]], # color
                                     -1) # thickness = -1 means filled rectangle
+                # draw two triangle
+                if i > 0  and j == 0 and calendar_array[i-1, j] == -1: # start triangle
+                    point1 = (left_top_x, left_top_y+(i-1)*step_h)
+                    point2 = (left_top_x+rect_w, left_top_y+(i-1)*step_h)
+                    point3 = (int(round(left_top_x+0.5*rect_w)), left_top_y+(i-1)*step_h+rect_h)
+                    triangle_points = np.array([point1, point2, point3])
+                    cv2.drawContours(img,[triangle_points], 0, color_level[0], -1)
+                if i < 6 and calendar_array[i+1, j] == -1: # end triangle
+                    point1 = (left_top_x+j*step_w, left_top_y+(i+1)*step_h+rect_h)
+                    point2 = (left_top_x+j*step_w+rect_w, left_top_y+(i+1)*step_h+rect_h)
+                    point3 = (int(round(left_top_x+j*step_w+0.5*rect_w)), left_top_y+(i+1)*step_h)
+                    triangle_points = np.array([point1, point2, point3])
+                    cv2.drawContours(img,[triangle_points], 0, color_level[0], -1)
 
     # draw color ruler
     color_ruler = [0, 1, 2, 3, 4]
     for i in range(len(color_ruler)):
         img = cv2.rectangle(img, # image
-                            (image_w-260+i*step_w, image_h-10-rect_h), # start_point
-                            (image_w-260+i*step_w+rect_h, image_h-10), # end_point
+                            (image_w-160+i*step_w, image_h-10-rect_h), # start_point
+                            (image_w-160+i*step_w+rect_h, image_h-10), # end_point
                             color_level[color_ruler[i]], # color
                             -1) # thickness = -1 means filled rectangle
-
 
     # fill text of weekday
     weekday_text_array = ['Mon', 'Wed', 'Fri']
@@ -186,13 +188,23 @@ def draw_calendar_graph(calendar_array):
     for i in range(len(less_more_text)):
         img = cv2.putText(img, # image
                     less_more_text[i], # text
-                    (int(round(image_w-300+7*i*step_w)), image_h-11), # bottom-left corner of the text string
+                    (int(round(image_w-200+7*i*step_w)), image_h-11), # bottom-left corner of the text string
                     cv2.FONT_HERSHEY_SIMPLEX, # font type
                     0.5, # font scale factor
                     (0,0,0), # color
                     1, # thickness
                     cv2.LINE_AA) # linetype
 
+    # fill text of summary
+    summary_text = '222 contributions in total'
+    img = cv2.putText(img, # image
+                summary_text, # text
+                (200, image_h-11), # bottom-left corner of the text string
+                cv2.FONT_HERSHEY_SIMPLEX, # font type
+                0.5, # font scale factor
+                (0,0,0), # color
+                1, # thickness
+                cv2.LINE_AA) # linetype
 
 
     cv2.imshow("result", img)
