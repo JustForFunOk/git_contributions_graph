@@ -256,7 +256,8 @@ def extract_date_info(year):
         # get the day number between to date
         d = date(date_time_obj[0], date_time_obj[1], date_time_obj[2])
         days = (d - start_date).days
-        date_statistic[days] += 1
+        if days >=0 and days < days_num
+            date_statistic[days] += 1
 
     # including -1, 0, 1, 2, 3, 4
     statistic_level = convert_statistic_to_color_level(date_statistic)
@@ -360,23 +361,6 @@ if __name__ == "__main__":
     print("%d: %s\n" %(len(date_string_list)-1, date_string_list[len(date_string_list)-1]))
 
     extract_date_info(2020)
-
-
-
-    # get time, paras time
-    # from datetime import date
-    # d0 = date(2008, 8, 18)
-    # d1 = date(2008, 9, 26)
-    # delta = d1 - d0
-    # print(delta.days)
-    # d0.weekday()
-
-
-    # store times of time to array
-    # resize to 2-D array
-
-
-    # draw image with OpenCV
 
 
 
