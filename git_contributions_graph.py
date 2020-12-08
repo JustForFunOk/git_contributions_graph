@@ -16,7 +16,7 @@ tmp_store_folder = ""
 
 date_string_list = []  # e.g. Date:   2020-04-09
 
-
+total_contributions_cnt = 0
 
 # get all folder path
 # including itself floder
@@ -43,7 +43,7 @@ def get_all_floder():
     return subfolder_list
 
 
-def get_author_commits(repo_path):
+def get_author_commits(git_folder):
     """
     the output format looks like this
 
@@ -55,10 +55,12 @@ def get_author_commits(repo_path):
     """
     os.chdir(git_folder)
 
+    folder_name = os.path.basename(os.path.normpath(git_folder))
+
     # get author commit and write to *.txt file
     for author_email in author_email_list:
         index = author_email_list.index(author_email)
-        os.system("git log --author=%s --date=short > %s" %(author_email, tmp_file_name_list[index]))
+        os.system("git log --author=%s --date=short > %s" %(author_email, tmp_file_name_list[index]+ folder_name + '.txt'))
 
 def post_process_email():
     """
@@ -66,7 +68,7 @@ def post_process_email():
     add 'tmp_' prefix
     """
     for email_addr in author_email_list:
-        tmp_file_name = tmp_store_folder  + '/' + 'tmp_' + email_addr[:-4] + '.txt'
+        tmp_file_name = tmp_store_folder  + '/' + 'tmp_' + email_addr[:-4] + '_'
         tmp_file_name_list.append(tmp_file_name)
         print("%s >> %s" %(email_addr, tmp_file_name))
 
@@ -196,7 +198,7 @@ def draw_calendar_graph(calendar_array):
                     cv2.LINE_AA) # linetype
 
     # fill text of summary
-    summary_text = '222 contributions in total'
+    summary_text = str(total_contributions_cnt) + ' contributions in total'
     img = cv2.putText(img, # image
                 summary_text, # text
                 (200, image_h-11), # bottom-left corner of the text string
@@ -330,6 +332,7 @@ if __name__ == "__main__":
     # read file line by line
     # get the line start with 'Date'
     get_date_lines()
+    total_contributions_cnt = len(date_string_list)
     print("get %d commits in total" %len(date_string_list))
     print("0: %s" %date_string_list[0])
     print("------")
