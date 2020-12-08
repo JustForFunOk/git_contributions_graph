@@ -155,25 +155,25 @@ def draw_calendar_graph(calendar_array, year):
     color_ruler = [0, 1, 2, 3, 4]
     for i in range(len(color_ruler)):
         img = cv2.rectangle(img, # image
-                            (image_w-160+i*step_w, image_h-10-rect_h), # start_point
-                            (image_w-160+i*step_w+rect_h, image_h-10), # end_point
+                            (image_w-190+i*step_w, image_h-10-rect_h), # start_point
+                            (image_w-190+i*step_w+rect_h, image_h-10), # end_point
                             color_level[color_ruler[i]], # color
                             -1) # thickness = -1 means filled rectangle
 
     # draw year rectangle
-    year_rect_w = 5*rect_w
-    year_rect_h = int(round(1.5*rect_h))
-    img = cv2.rectangle(img, # image
-                        # (int(round(image_w/2.0-year_rect_w/2.0)), image_h-5-year_rect_h), # start_point
-                        # (int(round(image_w/2.0+year_rect_w/2.0)), image_h-5), # end_point
-                        (25, image_h-5-year_rect_h), # start_point
-                        (25+year_rect_w, image_h-5), # end_point
-                        color_level[color_ruler[0]], # color
-                        -1) # thickness = -1 means filled rectangle
+    # year_rect_w = 5*rect_w
+    # year_rect_h = int(round(1.5*rect_h))
+    # img = cv2.rectangle(img, # image
+    #                     # (int(round(image_w/2.0-year_rect_w/2.0)), image_h-5-year_rect_h), # start_point
+    #                     # (int(round(image_w/2.0+year_rect_w/2.0)), image_h-5), # end_point
+    #                     (25, image_h-5-year_rect_h), # start_point
+    #                     (25+year_rect_w, image_h-5), # end_point
+    #                     color_level[color_ruler[0]], # color
+    #                     -1) # thickness = -1 means filled rectangle
     # fill year text
     img = cv2.putText(img, # image
-                        str(year), # text
-                        (30, image_h-8), # bottom-left corner of the text string
+                        '[' + str(year) + ']', # text
+                        (30, image_h-10), # bottom-left corner of the text string
                         cv2.FONT_HERSHEY_COMPLEX, # font type
                         0.8, # font scale factor
                         (0,0,0), # color
@@ -211,7 +211,7 @@ def draw_calendar_graph(calendar_array, year):
     for i in range(len(less_more_text)):
         img = cv2.putText(img, # image
                     less_more_text[i], # text
-                    (int(round(image_w-200+7*i*step_w)), image_h-11), # bottom-left corner of the text string
+                    (int(round(image_w-230+7*i*step_w)), image_h-11), # bottom-left corner of the text string
                     cv2.FONT_HERSHEY_SIMPLEX, # font type
                     0.5, # font scale factor
                     (0,0,0), # color
@@ -219,10 +219,10 @@ def draw_calendar_graph(calendar_array, year):
                     cv2.LINE_AA) # linetype
 
     # fill text of summary
-    summary_text = str(total_contributions_cnt) + ' contributions in total'
+    summary_text = str(total_contributions_cnt) + ' contributions in total (GitLab + Github + Bitbucket)'
     img = cv2.putText(img, # image
                 summary_text, # text
-                (200, image_h-11), # bottom-left corner of the text string
+                (300, image_h-11), # bottom-left corner of the text string
                 cv2.FONT_HERSHEY_SIMPLEX, # font type
                 0.5, # font scale factor
                 (0,0,0), # color
