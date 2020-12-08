@@ -107,7 +107,7 @@ def convert_statistic_to_color_level(date_statistic):
         cnt += 1
     return statistic_level
 
-def draw_calendar_graph(calendar_array):
+def draw_calendar_graph(calendar_array, year):
     #(B, G, R)
     color_level = [(240, 240, 240),  # gray
                    (155, 233, 168),
@@ -159,6 +159,27 @@ def draw_calendar_graph(calendar_array):
                             (image_w-160+i*step_w+rect_h, image_h-10), # end_point
                             color_level[color_ruler[i]], # color
                             -1) # thickness = -1 means filled rectangle
+
+    # draw year rectangle
+    year_rect_w = 5*rect_w
+    year_rect_h = int(round(1.5*rect_h))
+    img = cv2.rectangle(img, # image
+                        # (int(round(image_w/2.0-year_rect_w/2.0)), image_h-5-year_rect_h), # start_point
+                        # (int(round(image_w/2.0+year_rect_w/2.0)), image_h-5), # end_point
+                        (25, image_h-5-year_rect_h), # start_point
+                        (25+year_rect_w, image_h-5), # end_point
+                        color_level[color_ruler[0]], # color
+                        -1) # thickness = -1 means filled rectangle
+    # fill year text
+    img = cv2.putText(img, # image
+                        str(year), # text
+                        (30, image_h-8), # bottom-left corner of the text string
+                        cv2.FONT_HERSHEY_COMPLEX, # font type
+                        0.8, # font scale factor
+                        (0,0,0), # color
+                        1, # thickness
+                        cv2.LINE_AA) # linetype
+
 
     # fill text of weekday
     weekday_text_array = ['Mon', 'Wed', 'Fri']
@@ -281,7 +302,7 @@ def extract_date_info(year):
     '''
     # print(calendar_array)
 
-    draw_calendar_graph(calendar_array)
+    draw_calendar_graph(calendar_array, 2020)
 
 
 
