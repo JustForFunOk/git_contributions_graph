@@ -106,14 +106,77 @@ def convert_statistic_to_color_level(date_statistic):
     return statistic_level
 
 def draw_calendar_graph(calendar_array):
-    color_level = [[100, 100, 100],  # gray
-                   [  0,   0,  60],
-                   [  0,   0, 120],
-                   [  0,   0, 180],
-                   [  0,   0, 240]
+    #(B, G, R)
+    color_level = [(240, 240, 240),  # gray
+                   (155, 233, 168),
+                   ( 64, 196,  99),
+                   ( 48, 161,  78),
+                   ( 33, 110,  57)
                     ]
+    '''
+    ----------------------------------------
+    |
+    |   --
+    |
+    |
+    |
+    |
+    |
 
+    '''
+    image_w = 1200
+    image_h = 230
+    left_top_x = 50
+    left_top_y = 50
+    rect_w = 15
+    rect_h = 15
+    step_w = 20
+    step_h = 20
+
+    # create empty white image
+    img = np.zeros((image_h, image_w, 3), np.uint8)
+    img.fill(255)
     # draw round rectangle with color level
+    for i in range(len(calendar_array)):
+        for j in range(len(calendar_array[0])):
+            if calendar_array[i, j] != -1:
+                # thickness = -1 means filled rectangle
+                img = cv2.rectangle(img, (left_top_x+j*step_w, left_top_y+i*step_h), (left_top_x+j*step_w+rect_w, left_top_y+i*step_h+rect_h), color_level[calendar_array[i,j]], -1)
+
+    # fill text
+    # Monday
+    img = cv2.putText(img, # image
+                    'Mon', # text
+                    (left_top_x-32, left_top_y+step_h+rect_h), # bottom-left corner of the text string
+                    cv2.FONT_HERSHEY_SIMPLEX, # font type
+                    0.5, # font scale factor
+                    (0,0,0), # color
+                    1, # thickness
+                    cv2.LINE_AA) # linetype
+    # Wednesday
+    img = cv2.putText(img, # image
+                    'Wed', # text
+                    (left_top_x-32, left_top_y+3*step_h+rect_h), # bottom-left corner of the text string
+                    cv2.FONT_HERSHEY_SIMPLEX, # font type
+                    0.5, # font scale factor
+                    (0,0,0), # color
+                    1, # thickness
+                    cv2.LINE_AA) # linetype
+    # Friday
+    img = cv2.putText(img, # image
+                    'Fri', # text
+                    (left_top_x-32, left_top_y+5*step_h+rect_h), # bottom-left corner of the text string
+                    cv2.FONT_HERSHEY_SIMPLEX, # font type
+                    0.5, # font scale factor
+                    (0,0,0), # color
+                    1, # thickness
+                    cv2.LINE_AA) # linetype
+
+
+    cv2.imshow("result", img)
+    while True:
+        if cv2.waitKey(30) == 27:
+            break
 
 
 
@@ -180,7 +243,7 @@ def extract_date_info(year):
     Fri   0
     Sat   0
     '''
-    print(calendar_array)
+    # print(calendar_array)
 
     draw_calendar_graph(calendar_array)
 
