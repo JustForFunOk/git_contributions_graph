@@ -6,6 +6,7 @@ from datetime import date  # date
 import time
 import numpy as np
 import re # re.search
+import cv2
 
 author_email_list = ['slgsunjian@163.com', 'slgsunjian@gmail.com', 'sunjian4@csvw.com']
 
@@ -81,6 +82,40 @@ def get_date_lines():
         fo.close()
         print("%s processed\n" %file)
 
+def convert_statistic_to_color_level(date_statistic):
+    # find the max number
+    max_commit_cnt = np.max(date_statistic)
+
+    # divide commits cnt into 4 level and level 0, 5 level in total
+    level_step = round(max_commit_cnt / 4.0)
+    if level_step < 1 :
+        level_step = 1
+
+    statistic_level = date_statistic.copy()
+    cnt = 0
+    for number in date_statistic:
+        if number > 0 and number <= level_step :
+            statistic_level[cnt] = 1
+        elif number > level_step and number <= 2*level_step :
+            statistic_level[cnt] = 2
+        elif number > 2*level_step and number <= 3*level_step :
+            statistic_level[cnt] = 3
+        elif number > 3*level_step :
+            statistic_level[cnt] = 4
+        cnt += 1
+    return statistic_level
+
+def draw_calendar_graph(calendar_array):
+    color_level = [[100, 100, 100],  # gray
+                   [  0,   0,  60],
+                   [  0,   0, 120],
+                   [  0,   0, 180],
+                   [  0,   0, 240]
+                    ]
+
+    # draw round rectangle with color level
+
+
 
 def extract_date_info(year):
     # get the total days in one year
@@ -103,7 +138,8 @@ def extract_date_info(year):
         days = (d - start_date).days
         date_statistic[days] += 1
 
-    # print(date_statistic)
+    # including -1, 0, 1, 2, 3, 4
+    statistic_level = convert_statistic_to_color_level(date_statistic)
 
     # add dummy  date
     # get the weekday of xxxx-1-1
@@ -118,18 +154,18 @@ def extract_date_info(year):
         prefix_date = np.zeros(weekday_1_1+1, dtype=np.intc)
         for i in range(weekday_1_1+1):
             prefix_date[i] = -1
-        date_statistic = np.append(prefix_date, date_statistic)
+        tmp_date_statistic = np.append(prefix_date, statistic_level)
 
     # add postfix
-    if np.size(date_statistic) /7 != 0:
-        postfix_num = 7 - np.size(date_statistic) % 7
+    if np.size(tmp_date_statistic) /7 != 0:
+        postfix_num = 7 - np.size(tmp_date_statistic) % 7
         postfix_date = np.zeros(postfix_num, dtype=np.intc)
         for i in range(postfix_num):
             postfix_date[i] = -1
-        date_statistic = np.append(date_statistic, postfix_date)
+        tmp_date_statistic = np.append(tmp_date_statistic, postfix_date)
 
     # reshape
-    calendar_array =np.reshape(date_statistic, (-1, 7))
+    calendar_array =np.reshape(tmp_date_statistic, (-1, 7))
 
     # 2d array transposition
     calendar_array = np.transpose(calendar_array)
@@ -144,8 +180,9 @@ def extract_date_info(year):
     Fri   0
     Sat   0
     '''
-
     print(calendar_array)
+
+    draw_calendar_graph(calendar_array)
 
 
 
