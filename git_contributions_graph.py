@@ -2,14 +2,20 @@
 # -*- coding: utf-8 -*-
 
 import os
+from datetime import date  # date
+import time
+import numpy as np
+import re # re.search
 
 author_email_list = ['slgsunjian@163.com', 'slgsunjian@gmail.com', 'sunjian4@csvw.com']
 
-tmp_file_name_list = []
+tmp_file_name_list = []  # e.g. tmp_xxxxxx@xx.txt
 
 tmp_store_folder = ""
 
-date_list = []
+date_string_list = []  # e.g. Date:   2020-04-09
+
+
 
 # get all folder path
 # including itself floder
@@ -71,9 +77,97 @@ def get_date_lines():
         fo = open(file,"r")
         for line in fo.readlines():
             if line.startswith("Date:"):
-                date_list.append(line)
+                date_string_list.append(line)
         fo.close()
         print("%s processed\n" %file)
+
+
+def extract_date_info(year):
+    # get the total days in one year
+    start_date = date(year, 1, 1)
+    end_date = date(year, 12, 31)
+    days_num = (end_date - start_date).days  # e.g. 2020 has 365 days
+
+    date_statistic = np.zeros(days_num, dtype=np.intc)
+
+    for date_string in date_string_list:
+        # e.g. Date:   2020-04-09
+        date_start_pos = re.search(r"\d", date_string).start()
+        date_time = date_string[date_start_pos: -1]  # remove last \n
+        date_time_obj = time.strptime(date_time, '%Y-%m-%d')
+        # print(date_time_obj[0]) # year
+        # print(date_time_obj[1]) # month
+        # print(date_time_obj[2]) # day
+        # get the day number between to date
+        d = date(date_time_obj[0], date_time_obj[1], date_time_obj[2])
+        days = (d - start_date).days
+        date_statistic[days] += 1
+
+    # print(date_statistic)
+
+    # add dummy  date
+    # get the weekday of xxxx-1-1
+    # 0 - monday
+    # 5 - saturday
+    # 6 - sunday
+    weekday_1_1 = start_date.weekday()
+    print("weekday_1_1 is %d \n" %weekday_1_1)
+
+    # add prefix
+    if weekday_1_1 < 6 :
+        prefix_date = np.zeros(weekday_1_1+1, dtype=np.intc)
+        for i in range(weekday_1_1+1):
+            prefix_date[i] = -1
+        date_statistic = np.append(prefix_date, date_statistic)
+
+    # add postfix
+    if np.size(date_statistic) /7 != 0:
+        postfix_num = 7 - np.size(date_statistic) % 7
+        postfix_date = np.zeros(postfix_num, dtype=np.intc)
+        for i in range(postfix_num):
+            postfix_date[i] = -1
+        date_statistic = np.append(date_statistic, postfix_date)
+
+    # reshape
+    calendar_array =np.reshape(date_statistic, (-1, 7))
+
+    # 2d array transposition
+    calendar_array = np.transpose(calendar_array)
+    # the 2D array of 2020 looks like
+    '''
+          0   1   2   x   x   x   54
+    Sun  -1   x
+    Mon  -1   x
+    Tue  -1
+    Wed   0
+    Thu   0
+    Fri   0
+    Sat   0
+    '''
+
+    print(calendar_array)
+
+
+
+    # init 2D array to store index of days
+    # if days_num == 366 and weekday_1_1 == 6:
+    #     week_num = 54
+    # else :
+    #     week_num = 53
+
+
+    # calendar_array = np.zeros([week_num, 7])  # one week has 7 day
+
+    # tmp_weekday = weekday_1_1
+    # tmp_week = 0
+    # # i start from 1
+    # for i in range(1, days_num+1):
+    #     if tmp_weekday > 6:
+    #         tmp_week += 1
+    #         tmp_weekday = 0
+    #     calendar_array[tmp_week, tmp_weekday] = i
+    #     tmp_weekday += 1
+    #
 
 
 if __name__ == "__main__":
@@ -102,10 +196,14 @@ if __name__ == "__main__":
     # read file line by line
     # get the line start with 'Date'
     get_date_lines()
-    print("get %d commits in total" %len(date_list))
-    print("0: %s" %date_list[0])
+    print("get %d commits in total" %len(date_string_list))
+    print("0: %s" %date_string_list[0])
     print("------")
-    print("%d: %s\n" %(len(date_list)-1, date_list[len(date_list)-1]))
+    print("%d: %s\n" %(len(date_string_list)-1, date_string_list[len(date_string_list)-1]))
+
+    extract_date_info(2020)
+
+
 
     # get time, paras time
     # from datetime import date
@@ -114,9 +212,7 @@ if __name__ == "__main__":
     # delta = d1 - d0
     # print(delta.days)
     # d0.weekday()
-    # 0 - sunday
-    # 1 - monday
-    # 6 - saturday
+
 
     # store times of time to array
     # resize to 2-D array
