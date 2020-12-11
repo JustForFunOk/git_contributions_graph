@@ -60,7 +60,7 @@ def get_author_commits(git_folder):
     # get author commit and write to *.txt file
     for author_email in author_email_list:
         index = author_email_list.index(author_email)
-        os.system("git log --author=%s --date=short > %s" %(author_email, tmp_file_name_list[index]+ folder_name + '.txt'))
+        os.system("git log --author=%s --date=short --all> %s" %(author_email, tmp_file_name_list[index]+ folder_name + '.txt'))
 
 def post_process_email():
     """
@@ -256,7 +256,7 @@ def extract_date_info(year):
         # get the day number between to date
         d = date(date_time_obj[0], date_time_obj[1], date_time_obj[2])
         days = (d - start_date).days
-        if days >=0 and days < days_num
+        if days >=0 and days < days_num :
             date_statistic[days] += 1
 
     # including -1, 0, 1, 2, 3, 4

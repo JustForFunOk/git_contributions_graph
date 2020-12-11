@@ -1,2 +1,2 @@
 # README
-put all your git repositories to this folder
+put all your git repositories or link to this folder

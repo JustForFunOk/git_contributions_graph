@@ -1,0 +1,7 @@
+# store temporary file
+/tmp/
+!/tmp/README.md
+
+# store your repo folder or repo folder link
+/repositories/
+!/repositories/README.md
