@@ -9,6 +9,7 @@ import re # re.search
 import cv2
 
 author_email_list = ['slgsunjian@163.com', 'slgsunjian@gmail.com', 'sunjian4@csvw.com']
+dest_year = 2020  # 2020 year
 
 tmp_file_name_list = []  # e.g. tmp_xxxxxx@xx.txt
 
@@ -340,4 +341,4 @@ if __name__ == "__main__":
         print("------")
         print("%d: %s\n" %(len(date_string_list)-1, date_string_list[len(date_string_list)-1]))
 
-    extract_date_info(2020)
+    extract_date_info(dest_year)
