@@ -2,13 +2,13 @@
 
 ## Why this project?
 
-use this project your can merge all your git commit contributions(maybe including Github, GitLab, Bitbucket) into one graph.
+With this project, your can merge all your git commit contributions(maybe distributed in Github, GitLab, Bitbucket) into one graph.
 
 ## How it works
 
 * local repositories
 * git log --author=xxxx --all
-* opencv draw graph
+* draw graph with opencv
 
 ## Usage
 
@@ -33,3 +33,8 @@ use this project your can merge all your git commit contributions(maybe includin
 1. save image using `save` button
 
 1. press `Esc` to exit
+
+
+## Demo
+
+![](./demo/git_contri.png)
