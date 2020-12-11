@@ -37,4 +37,4 @@ With this project, your can merge all your git commit contributions(maybe distri
 
 ## Demo
 
-![](./demo/git_contri.png)
+![git_contri.png](./demo/git_contri.png)
