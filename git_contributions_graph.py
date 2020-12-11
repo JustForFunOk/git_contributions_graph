@@ -109,11 +109,11 @@ def convert_statistic_to_color_level(date_statistic):
 
 def draw_calendar_graph(calendar_array, year):
     #(B, G, R)
-    color_level = [(240, 240, 240),  # gray
-                   (155, 233, 168),
-                   ( 64, 196,  99),
-                   ( 48, 161,  78),
-                   ( 33, 110,  57)
+    color_level = [(240, 240, 240),  # level 0 gray (Less)
+                   (155, 233, 168),  # level 1
+                   ( 64, 196,  99),  # level 2
+                   ( 48, 161,  78),  # level 3
+                   ( 33, 110,  57)   # level 4 (More)
                     ]
 
     image_w = 1130
@@ -233,6 +233,7 @@ def draw_calendar_graph(calendar_array, year):
     cv2.imshow("result", img)
     while True:
         if cv2.waitKey(30) == 27:
+            cv2.destroyAllWindows()
             break
 
 
@@ -303,29 +304,7 @@ def extract_date_info(year):
     '''
     # print(calendar_array)
 
-    draw_calendar_graph(calendar_array, 2020)
-
-
-
-    # init 2D array to store index of days
-    # if days_num == 366 and weekday_1_1 == 6:
-    #     week_num = 54
-    # else :
-    #     week_num = 53
-
-
-    # calendar_array = np.zeros([week_num, 7])  # one week has 7 day
-
-    # tmp_weekday = weekday_1_1
-    # tmp_week = 0
-    # # i start from 1
-    # for i in range(1, days_num+1):
-    #     if tmp_weekday > 6:
-    #         tmp_week += 1
-    #         tmp_weekday = 0
-    #     calendar_array[tmp_week, tmp_weekday] = i
-    #     tmp_weekday += 1
-    #
+    draw_calendar_graph(calendar_array, year)
 
 
 if __name__ == "__main__":
@@ -356,16 +335,9 @@ if __name__ == "__main__":
     get_date_lines()
     total_contributions_cnt = len(date_string_list)
     print("get %d commits in total" %len(date_string_list))
-    print("0: %s" %date_string_list[0])
-    print("------")
-    print("%d: %s\n" %(len(date_string_list)-1, date_string_list[len(date_string_list)-1]))
+    if len(date_string_list) > 0 :
+        print("0: %s" %date_string_list[0])
+        print("------")
+        print("%d: %s\n" %(len(date_string_list)-1, date_string_list[len(date_string_list)-1]))
 
     extract_date_info(2020)
-
-
-
-
-
-
-
-
